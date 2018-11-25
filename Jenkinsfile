@@ -41,6 +41,8 @@ pipeline {
 	            sh "docker stop gateway || true"
 	            sh "docker rm gateway || true"
 		        sh '''docker run --restart unless-stopped -d -p 8080:80 --dns \$(docker inspect -f \'{{.NetworkSettings.IPAddress}}\' dns) --dns-search brainspeedtech.com --name gateway --hostname gateway.brainspeedtech.com brainspeedtech/gateway:\$MAVEN_VERSION_NUMBER'''
+		        sh 'cp nginx.conf /usr/local/etc/nginx/servers/gateway.conf'
+		        sh 'brew services restart nginx'
             }
         }
     }
